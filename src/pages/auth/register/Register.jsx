@@ -1,9 +1,9 @@
-import React, { useState } from "react";
-import {Container,Box,Typography,TextField,Button,CircularProgress,Paper,} from "@mui/material";
-import { useForm } from "react-hook-form";
-import axios from "axios";
-import { yupResolver } from "@hookform/resolvers/yup";
-import { registerSchema } from "../../../validation/RegisterSchema";
+import React, { useState } from "react"
+import {Container,Box,Typography,TextField,Button,CircularProgress,Paper,} from "@mui/material"
+import { useForm } from "react-hook-form"
+import { yupResolver } from "@hookform/resolvers/yup"
+import { registerSchema } from "../../../validation/RegisterSchema"
+import axiosInstance from "../../../api/axiosInstance"
 
 export default function Register() {
     const [serverError, setServerError] = useState([]);
@@ -14,8 +14,8 @@ export default function Register() {
     });
     const registerForm = async (values) => {
     try {
-        const response = await axios.post(
-        `https://knowledgeshop.runasp.net/api/auth/Account/Register`,
+        const response = await axiosInstance.post(
+        `/auth/Account/Register`,
         values
         );
         console.log("response", response);

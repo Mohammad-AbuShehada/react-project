@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import {Container,Box,Typography,TextField,Button,CircularProgress,Paper,} from "@mui/material";
-import { useForm } from "react-hook-form";
-import axios from "axios";
-import { yupResolver } from "@hookform/resolvers/yup";
-import { loginSchema } from "../../../validation/LoginSchema";
+import {Container,Box,Typography,TextField,Button,CircularProgress,Paper,} from "@mui/material"
+import { useForm } from "react-hook-form"
+import { yupResolver } from "@hookform/resolvers/yup"
+import { loginSchema } from "../../../validation/LoginSchema"
+import axiosInstance from "../../../api/axiosInstance"
 
 export default function Login() {
     const [serverError, setServerError] = useState([]);
@@ -15,8 +15,8 @@ export default function Login() {
 
     const loginForm = async (values) => {
     try {
-        const response = await axios.post(
-        `https://knowledgeshop.runasp.net/api/auth/Account/Login`,
+        const response = await axiosInstance.post(
+        `/auth/Account/Login`,
         values
     );
         console.log("response", response);
