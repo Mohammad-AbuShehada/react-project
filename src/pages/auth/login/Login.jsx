@@ -19,6 +19,10 @@ export default function Login() {
         `/auth/Account/Login`,
         values
     );
+    if(response.status === 200){
+        localStorage.setItem("accessToken", response.data.accessToken);
+    }
+
         console.log("response", response);
     } catch (error) {
     setServerError(error.response?.data?.errors || ["Invalid credentials"]);
