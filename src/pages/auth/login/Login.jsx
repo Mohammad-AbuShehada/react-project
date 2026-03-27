@@ -4,10 +4,12 @@ import { useForm } from "react-hook-form"
 import { yupResolver } from "@hookform/resolvers/yup"
 import { loginSchema } from "../../../validation/LoginSchema"
 import axiosInstance from "../../../api/axiosInstance"
-
+import useAuthStore from "../../../store/useAuthStore";
+import { useNavigate } from "react-router-dom";
 export default function Login() {
     const [serverError, setServerError] = useState([]);
-
+    const setToken= useAuthStore( (state) => state.setToken);
+    const nevigate = useNavigate();
     const {register,handleSubmit,formState: { errors, isSubmitting },} = useForm({
     resolver: yupResolver(loginSchema),
     mode: "onBlur",
@@ -20,7 +22,8 @@ export default function Login() {
         values
     );
     if(response.status === 200){
-        localStorage.setItem("accessToken", response.data.accessToken);
+        setToken(response.data.accessToken);
+        nevigate("/");
     }
 
         console.log("response", response);

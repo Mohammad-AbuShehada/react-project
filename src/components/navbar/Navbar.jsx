@@ -10,8 +10,16 @@ import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
 import {Link as RouterLink} from 'react-router-dom';
-
+import useAuthStore from "../../store/useAuthStore";
+import { useNavigate } from "react-router-dom";
 export default function Navbar() {
+    const token = useAuthStore( (state) => state.token);
+    const logout= useAuthStore( (state) => state.logout);
+    const navigate = useNavigate();
+    const handleLogout=()=>{
+        logout();
+        navigate('/login');
+    }
     return (
         <Box sx={{ flexGrow: 1 }}>
             <AppBar position="static" elevation={0} sx={{ backgroundColor: "white", color: "black" }}>
@@ -22,13 +30,26 @@ export default function Navbar() {
                     </Box>
                     <Box sx={{ flexGrow: 1, display: "flex", gap: 3, alignItems:"center"}}>
                         <Link component={RouterLink} to={'/'} color="inherit" sx={{ textTransform: "none"}} underline="none">Home</Link>
+                        {
+                            token?
+                        (
+                            <>
+                            <Link component={RouterLink} to={'/cart'} color="inherit" sx={{ textTransform: "none" }} underline="none">Cart</Link>
+                            <Link component={'button'} onClick={handleLogout} color="inherit" sx={{ textTransform: "none" }} underline="none">logout</Link>
+                            </>
+                        ):
+                        (
+                            <>
+                            <Box sx={{ display: "flex", alignItems: "center", gap: 1, mr: 2 }}>
+                                <Link component={RouterLink} to={'/login'} color="inherit" sx={{ textTransform: "none" }} underline="none">Login</Link>
+                                <Link component={RouterLink} to={'/register'} variant="outlined" sx={{ textTransform: "none",borderColor: "black",color: "black"}} underline="none">Register</Link>
+                            </Box>
+                            </>
+                        )
+                        }
                         <Link component={RouterLink} to={'/shop'} color="inherit" sx={{ textTransform: "none" }} underline="none">Shop</Link>
                         <Link component={RouterLink} to={'/about'} color="inherit" sx={{ textTransform: "none" }} underline="none">About</Link>
                         <Link component={RouterLink} to={'/contact'} color="inherit" sx={{ textTransform: "none" }} underline="none">Contact</Link>
-                    </Box>
-                    <Box sx={{ display: "flex", alignItems: "center", gap: 1, mr: 2 }}>
-                        <Link component={RouterLink} to={'/login'} color="inherit" sx={{ textTransform: "none" }} underline="none">Login</Link>
-                        <Link component={RouterLink} to={'/register'} variant="outlined" sx={{ textTransform: "none",borderColor: "black",color: "black"}} underline="none">Register</Link>
                     </Box>
                     <Box>
                         <IconButton color="inherit">

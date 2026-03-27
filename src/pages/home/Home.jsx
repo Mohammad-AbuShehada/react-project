@@ -1,10 +1,10 @@
-import React from "react"
-import Categories from "../../components/categories/Categories"
+import React from "react";
 import Products from "../../components/products/Products";
+import CategoriesSection from "../../components/categories/CategoriesSection";
 export default function Home(){
     return (
         <div>
-            <Categories/>
+            <CategoriesSection/>
             <Products/>
         </div>
     )

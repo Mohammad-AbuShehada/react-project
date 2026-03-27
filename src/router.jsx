@@ -5,6 +5,8 @@ import Cart from "./pages/cart/Cart";
 import Login from "./pages/auth/login/Login";
 import ProductDetails from "./pages/products/ProductDetails";
 import Register from "./pages/auth/register/Register";
+import CategoriesPages from "./pages/categories/CategoriesPage";
+import ProtectedRouter from "./ProtectedRouter";
 const router=createBrowserRouter([
     {
     path:"/",
@@ -15,19 +17,26 @@ const router=createBrowserRouter([
             element:<Home />
         },
         {
-            path:'/cart',
-            element:<Cart />
+            path:'cart',
+            element:
+            <ProtectedRouter>
+                <Cart />
+            </ProtectedRouter>
         },
         {
-            path:'/product/:id',
+            path:'product/:id',
             element:<ProductDetails />
         },
         {
-            path:'/login',
+            path:'categories',
+            element:<CategoriesPages />
+        },
+        {
+            path:'login',
             element:<Login />
         },
         {
-            path:'/register',
+            path:'register',
             element:<Register />
         }
     ]
