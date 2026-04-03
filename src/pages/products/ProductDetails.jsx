@@ -15,7 +15,7 @@ export default function ProductDetails() {
     if(isLoading) return <Loader />
     if(isError) return <Box color={'red'}>{error.message}</Box>
     const product = data.response;
-
+    
     return (
         <Box component={'div'} className='product_detalis' py={4}>
             <Card sx={{display:'flex', padding:'30px'}}>

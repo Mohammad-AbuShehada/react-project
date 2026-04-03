@@ -15,7 +15,8 @@ resources: {
         "Register": "Register",
         "Logout": "Logout",
         "About": "About",
-        "Contact": "Contact"
+        "Contact": "Contact",
+        "Profile": "Profile"
         }
     },
     ar:{
@@ -28,7 +29,8 @@ resources: {
         "Register": "انشاء حساب",
         "Logout": "تسجيل الخروج",
         "About": "من نحن",
-        "Contact": "اتصل بنا"
+        "Contact": "اتصل بنا",
+        "Profile": "الملف الشخصي"
         }
     }
     },

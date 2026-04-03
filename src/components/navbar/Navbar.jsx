@@ -71,7 +71,7 @@ export default function Navbar() {
                         <IconButton color="inherit">
                             <SearchIcon />
                         </IconButton>
-                        <IconButton color="inherit">
+                        <IconButton color="inherit" component={RouterLink} to={token?'/profile':'/login'}>
                             <PersonOutlineIcon />
                         </IconButton>
                         <IconButton color="inherit">
