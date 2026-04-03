@@ -8,7 +8,7 @@ import { Grid } from "@mui/material";
 import Category from "../../ui/category/Category";
 export default function CategoriesPage() {
 
-      const {data,isLoading,isError,error}=useCategories(7);
+        const {data,isLoading,isError,error}=useCategories(7);
             if(isLoading) return <Loader />
             if(isError) return <Box color={'red'}>{error.message}</Box>
 

@@ -12,9 +12,13 @@ import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
 import {Link as RouterLink} from 'react-router-dom';
 import useAuthStore from "../../store/useAuthStore";
 import { useNavigate } from "react-router-dom";
+import useCart from "../../hooks/useCart";
+import { Badge } from "@mui/material";
 export default function Navbar() {
     const token = useAuthStore( (state) => state.token);
     const logout= useAuthStore( (state) => state.logout);
+    const {data}=useCart();
+    const cartCount=data?.items?.length||0;
     const navigate = useNavigate();
     const handleLogout=()=>{
         logout();
@@ -34,7 +38,9 @@ export default function Navbar() {
                             token?
                         (
                             <>
-                            <Link component={RouterLink} to={'/cart'} color="inherit" sx={{ textTransform: "none" }} underline="none">Cart</Link>
+                            <Badge badgeContent={cartCount} color="secondary">
+                                <Link component={RouterLink} to={'/cart'} color="inherit" sx={{ textTransform: "none" }} underline="none">Cart</Link>
+                            </Badge>
                             <Link component={'button'} onClick={handleLogout} color="inherit" sx={{ textTransform: "none" }} underline="none">logout</Link>
                             </>
                         ):

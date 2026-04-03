@@ -8,7 +8,7 @@ export default function useCart() {
     }
 
     const query= useQuery({
-            queryKey:['cart','en'],
+            queryKey:['carts','en'],
             queryFn:getItems,
             staleTime:1000*60*5
         });
