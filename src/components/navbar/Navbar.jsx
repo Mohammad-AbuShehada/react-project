@@ -14,9 +14,16 @@ import useAuthStore from "../../store/useAuthStore";
 import { useNavigate } from "react-router-dom";
 import useCart from "../../hooks/useCart";
 import { Badge } from "@mui/material";
+import { useTranslation } from "react-i18next";
+import i18n from "../../../i18netx";
 export default function Navbar() {
     const token = useAuthStore( (state) => state.token);
     const logout= useAuthStore( (state) => state.logout);
+    const {t}=useTranslation();
+    const changeLanguage=()=>{
+        const newLanguage =i18n.language === "ar" ? "en" : "ar";
+        i18n.changeLanguage(newLanguage);
+    }
     const {data}=useCart();
     const cartCount=data?.items?.length||0;
     const navigate = useNavigate();
@@ -33,29 +40,32 @@ export default function Navbar() {
                         <Typography variant="h6" sx={{ fontWeight: "bold" }}>MOON.</Typography>
                     </Box>
                     <Box sx={{ flexGrow: 1, display: "flex", gap: 3, alignItems:"center"}}>
-                        <Link component={RouterLink} to={'/'} color="inherit" sx={{ textTransform: "none"}} underline="none">Home</Link>
+                        <button onClick={changeLanguage} color="inherit">
+                            {i18n.language === "ar" ? "EN" : "AR"}
+                        </button> 
+                        <Link component={RouterLink} to={'/'} color="inherit" sx={{ textTransform: "none"}} underline="none">{t("Home")}</Link>
                         {
                             token?
                         (
                             <>
                             <Badge badgeContent={cartCount} color="secondary">
-                                <Link component={RouterLink} to={'/cart'} color="inherit" sx={{ textTransform: "none" }} underline="none">Cart</Link>
+                                <Link component={RouterLink} to={'/cart'} color="inherit" sx={{ textTransform: "none" }} underline="none">{t("Cart")}</Link>
                             </Badge>
-                            <Link component={'button'} onClick={handleLogout} color="inherit" sx={{ textTransform: "none" }} underline="none">logout</Link>
+                            <Link component={'button'} onClick={handleLogout} color="inherit" sx={{ textTransform: "none" }} underline="none">{t("Logout")}</Link>
                             </>
                         ):
                         (
                             <>
                             <Box sx={{ display: "flex", alignItems: "center", gap: 1, mr: 2 }}>
-                                <Link component={RouterLink} to={'/login'} color="inherit" sx={{ textTransform: "none" }} underline="none">Login</Link>
-                                <Link component={RouterLink} to={'/register'} variant="outlined" sx={{ textTransform: "none",borderColor: "black",color: "black"}} underline="none">Register</Link>
+                                <Link component={RouterLink} to={'/login'} color="inherit" sx={{ textTransform: "none" }} underline="none">{t("Login")}</Link>
+                                <Link component={RouterLink} to={'/register'} variant="outlined" sx={{ textTransform: "none",borderColor: "black",color: "black"}} underline="none">{t("Register")}</Link>
                             </Box>
                             </>
                         )
                         }
-                        <Link component={RouterLink} to={'/shop'} color="inherit" sx={{ textTransform: "none" }} underline="none">Shop</Link>
-                        <Link component={RouterLink} to={'/about'} color="inherit" sx={{ textTransform: "none" }} underline="none">About</Link>
-                        <Link component={RouterLink} to={'/contact'} color="inherit" sx={{ textTransform: "none" }} underline="none">Contact</Link>
+                        <Link component={RouterLink} to={'/shop'} color="inherit" sx={{ textTransform: "none" }} underline="none">{t("Products")}</Link>
+                        <Link component={RouterLink} to={'/about'} color="inherit" sx={{ textTransform: "none" }} underline="none">{t("About")}</Link>
+                        <Link component={RouterLink} to={'/contact'} color="inherit" sx={{ textTransform: "none" }} underline="none">{t("Contact")}</Link>
                     </Box>
                     <Box>
                         <IconButton color="inherit">
