@@ -1,9 +1,10 @@
 import { createTheme } from "@mui/material";
-
-const theme=createTheme({
+const getTheme=(mode)=>{
+    return createTheme({
     palette:{
         primary:{
-            main:"#ff0000"
+            main:"#ff0000",
+            dark:"#fff000"
         }
     },
     typography:{
@@ -11,9 +12,12 @@ const theme=createTheme({
             fontFamily:"cursive",
             fontSize:"2rem",
             fontWeight:"900",
-        },
+        }
         
     },
     spacing:8,
+    mode:mode,
 });
-export default theme;
+}
+
+export default getTheme;

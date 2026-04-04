@@ -5,8 +5,9 @@ import { QueryClient ,QueryClientProvider} from "@tanstack/react-query"
 import "../i18netx"
 import { useTranslation } from "react-i18next"
 import { ThemeProvider } from "@emotion/react"
-import theme from "./theme"
+import getTheme from "./theme"
 import { CssBaseline } from "@mui/material"
+import useThemeStore from "./store/useThemeStore"
 export default function App() {    
 
 
@@ -15,10 +16,12 @@ export default function App() {
     const dir=i18n.language === "ar" ? "rtl" : "ltr";
     document.documentElement.dir=dir;
   },[i18n.language])
+  const mode=useThemeStore((state)=>state.mode);
   const queryClient=new QueryClient();
   return (
       <QueryClientProvider client={queryClient}>
-        <ThemeProvider theme={theme}>
+        <ThemeProvider theme={getTheme(mode)}>
+          <CssBaseline />
           <RouterProvider router={router} />
         </ThemeProvider>
   

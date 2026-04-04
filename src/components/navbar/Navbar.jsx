@@ -16,6 +16,7 @@ import useCart from "../../hooks/useCart";
 import { Badge } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import i18n from "../../../i18netx";
+import useThemeStore from "../../store/useThemeStore";
 export default function Navbar() {
     const token = useAuthStore( (state) => state.token);
     const logout= useAuthStore( (state) => state.logout);
@@ -27,6 +28,8 @@ export default function Navbar() {
     const {data}=useCart();
     const cartCount=data?.items?.length||0;
     const navigate = useNavigate();
+    const mode=useThemeStore((state)=>state.mode);
+    const toggleTheme=useThemeStore((state)=>state.toggleTheme);
     const handleLogout=()=>{
         logout();
         navigate('/login');
@@ -42,6 +45,9 @@ export default function Navbar() {
                     <Box sx={{ flexGrow: 1, display: "flex", gap: 3, alignItems:"center"}}>
                         <button onClick={changeLanguage} color="inherit">
                             {i18n.language === "ar" ? "EN" : "AR"}
+                        </button>
+                        <button onClick={toggleTheme} color="inherit">
+                            {mode === "light" ? "Dark" : "Light"}
                         </button> 
                         <Link component={RouterLink} to={'/'} color="inherit" sx={{ textTransform: "none"}} underline="none">{t("Home")}</Link>
                         {
