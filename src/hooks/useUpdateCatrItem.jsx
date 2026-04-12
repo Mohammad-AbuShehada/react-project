@@ -11,7 +11,7 @@ export default function useUpdateCartItem() {
         },
         onSuccess:()=>{
             queryClient.invalidateQueries(
-                { queryKey:['carts', 'en'] }
+                { queryKey:['carts'] }
             )
         }
     })
