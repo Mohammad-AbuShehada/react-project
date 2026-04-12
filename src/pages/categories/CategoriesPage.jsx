@@ -5,7 +5,7 @@ import Loader from "../../ui/Loader/Loader";
 import { Link } from "react-router-dom";
 import { Typography } from "@mui/material";
 import { Grid } from "@mui/material";
-import Category from "../../ui/category/Category";
+
 import { useTranslation } from "react-i18next";
 export default function CategoriesPage() {
         const {t}=useTranslation();
