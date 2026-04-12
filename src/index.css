@@ -1,0 +1,90 @@
+:root {
+    --moon-bg: #f7f6f5;
+    --moon-paper: #fcfbfa;
+    --moon-text: #2b2930;
+    --moon-muted: #6f6a74;
+    --moon-accent: #8a7668;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    margin: 0;
+    min-width: 320px;
+    background: var(--moon-bg);
+    color: var(--moon-text);
+}
+
+a {
+    color: inherit;
+}
+
+img {
+    max-width: 100%;
+    display: block;
+}
+
+@keyframes moonFloat {
+
+    0%,
+    100% {
+        transform: translate3d(0, 0, 0);
+    }
+
+    50% {
+        transform: translate3d(0, -12px, 0);
+    }
+}
+
+@keyframes moonPulse {
+
+    0%,
+    100% {
+        opacity: 0.28;
+        transform: scale(1);
+    }
+
+    50% {
+        opacity: 0.45;
+        transform: scale(1.06);
+    }
+}
+
+.moon-float {
+    animation: moonFloat 6s ease-in-out infinite;
+}
+
+.moon-pulse {
+    animation: moonPulse 5.5s ease-in-out infinite;
+}
+
+.moon-scroll-strip {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+.moon-scroll-strip::-webkit-scrollbar {
+    display: none;
+}
+
+.moon-scroll-card {
+    animation: moonCardReveal 0.7s ease both;
+}
+
+@keyframes moonCardReveal {
+    from {
+        opacity: 0;
+        transform: translate3d(0, 18px, 0);
+    }
+
+    to {
+        opacity: 1;
+        transform: translate3d(0, 0, 0);
+    }
+}

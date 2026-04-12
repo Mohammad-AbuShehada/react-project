@@ -1,30 +1,38 @@
-import React, { Component, useEffect } from "react"
+import React, { useEffect, useState } from "react"
 import { RouterProvider } from "react-router-dom"
 import router from "./router"
-import { QueryClient ,QueryClientProvider} from "@tanstack/react-query"
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import "../i18netx"
 import { useTranslation } from "react-i18next"
 import { ThemeProvider } from "@emotion/react"
 import getTheme from "./theme"
 import { CssBaseline } from "@mui/material"
 import useThemeStore from "./store/useThemeStore"
-export default function App() {    
+import useAuthStore from "./store/useAuthStore"
+import useWishlistStore from "./store/useWishlistStore"
+export default function App() {
+  const [queryClient] = useState(() => new QueryClient());
 
+  const { i18n } = useTranslation();
+  useEffect(() => {
+    const dir = i18n.language === "ar" ? "rtl" : "ltr";
+    document.documentElement.dir = dir;
+  }, [i18n.language])
+  const mode = useThemeStore((state) => state.mode);
+  const token = useAuthStore((state) => state.token);
+  const syncItemsWithAuth = useWishlistStore((state) => state.syncItemsWithAuth);
 
-  const {i18n}=useTranslation();
-  useEffect(()=>{
-    const dir=i18n.language === "ar" ? "rtl" : "ltr";
-    document.documentElement.dir=dir;
-  },[i18n.language])
-  const mode=useThemeStore((state)=>state.mode);
-  const queryClient=new QueryClient();
+  useEffect(() => {
+    syncItemsWithAuth();
+  }, [token, syncItemsWithAuth]);
+
   return (
-      <QueryClientProvider client={queryClient}>
-        <ThemeProvider theme={getTheme(mode)}>
-          <CssBaseline />
-          <RouterProvider router={router} />
-        </ThemeProvider>
-  
-      </QueryClientProvider>
+    <QueryClientProvider client={queryClient}>
+      <ThemeProvider theme={getTheme(mode)}>
+        <CssBaseline />
+        <RouterProvider router={router} />
+      </ThemeProvider>
+
+    </QueryClientProvider>
   )
 }

@@ -11,63 +11,88 @@ import Checkout from "./pages/checkout/Checkout";
 import Profile from "./pages/profile/Profile";
 import ProfileInfo from "./pages/profile/ProfileInfo";
 import ProfileOrders from "./pages/profile/ProfileOrders";
-const router=createBrowserRouter([
+import ForgotPassword from "./pages/auth/forgot-password/ForgotPassword";
+import About from "./pages/about/About";
+import Contact from "./pages/contact/Contact";
+import Blog from "./pages/blog/Blog";
+import Wishlist from "./pages/wishlist/Wishlist";
+const router = createBrowserRouter([
     {
-    path:"/",
-    element:<MainLayout />,
-        children:[
-        {
-            index:true,
-            element:<Home />
-        },
-        {
-            path:'cart',
-            element:
-            <ProtectedRouter>
-                <Cart />
-            </ProtectedRouter>
-        },
-        {
-            path:'checkout',
-            element:
-            <ProtectedRouter>
-                <Checkout />
-            </ProtectedRouter>
-        },
-        {
-            path:'profile',
-            element:
-            <ProtectedRouter>
-                <Profile />
-            </ProtectedRouter>,
-            children:[
-                {
-                    index:true,
-                    element:<ProfileInfo />
-                },
-                {
-                    path:'orders',
-                    element:<ProfileOrders />
-                }
-            ]
-        },
-        {
-            path:'product/:id',
-            element:<ProductDetails />
-        },
-        {
-            path:'categories',
-            element:<CategoriesPages />
-        },
-        {
-            path:'login',
-            element:<Login />
-        },
-        {
-            path:'register',
-            element:<Register />
-        }
-    ]
+        path: "/",
+        element: <MainLayout />,
+        children: [
+            {
+                index: true,
+                element: <Home />
+            },
+            {
+                path: 'cart',
+                element:
+                    <ProtectedRouter>
+                        <Cart />
+                    </ProtectedRouter>
+            },
+            {
+                path: 'checkout',
+                element:
+                    <ProtectedRouter>
+                        <Checkout />
+                    </ProtectedRouter>
+            },
+            {
+                path: 'profile',
+                element:
+                    <ProtectedRouter>
+                        <Profile />
+                    </ProtectedRouter>,
+                children: [
+                    {
+                        index: true,
+                        element: <ProfileInfo />
+                    },
+                    {
+                        path: 'orders',
+                        element: <ProfileOrders />
+                    }
+                ]
+            },
+            {
+                path: 'product/:id',
+                element: <ProductDetails />
+            },
+            {
+                path: 'categories',
+                element: <CategoriesPages />
+            },
+            {
+                path: 'login',
+                element: <Login />
+            },
+            {
+                path: 'register',
+                element: <Register />
+            },
+            {
+                path: 'forgot-password',
+                element: <ForgotPassword />
+            },
+            {
+                path: 'about',
+                element: <About />
+            },
+            {
+                path: 'contact',
+                element: <Contact />
+            },
+            {
+                path: 'blog',
+                element: <Blog />
+            },
+            {
+                path: 'wishlist',
+                element: <Wishlist />
+            }
+        ]
     }
 ]);
 export default router;
