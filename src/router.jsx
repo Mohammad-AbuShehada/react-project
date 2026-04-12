@@ -12,9 +12,9 @@ import Profile from "./pages/profile/Profile";
 import ProfileInfo from "./pages/profile/ProfileInfo";
 import ProfileOrders from "./pages/profile/ProfileOrders";
 import ForgotPassword from "./pages/auth/forgot-password/ForgotPassword";
-import About from "./pages/about/About";
 import Contact from "./pages/contact/Contact";
 import Blog from "./pages/blog/Blog";
+import About from "./pages/about/About";
 import Wishlist from "./pages/wishlist/Wishlist";
 const router = createBrowserRouter([
     {
