@@ -19,7 +19,7 @@ import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
 import DarkModeOutlinedIcon from "@mui/icons-material/DarkModeOutlined";
 import LightModeOutlinedIcon from "@mui/icons-material/LightModeOutlined";
 import TranslateOutlinedIcon from "@mui/icons-material/TranslateOutlined";
-import { Link as RouterLink, useNavigate } from "react-router-dom";
+import { Link as RouterLink, NavLink, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import i18n from "../../../i18netx";
 import useAuthStore from "../../store/useAuthStore";
@@ -142,9 +142,9 @@ export default function Navbar() {
                         {navLinks.map((item) => (
                             <Link
                                 key={item.label}
-                                component={item.to ? RouterLink : "a"}
+                                component={NavLink}
                                 to={item.to}
-                                href={item.href}
+                                end={item.to === "/"}
                                 underline="none"
                                 color="inherit"
                                 sx={{
@@ -154,8 +154,15 @@ export default function Navbar() {
                                     lineHeight: 1.2,
                                     flexShrink: 0,
                                     px: isArabic ? 0.5 : 0,
-                                    transition: "opacity 0.2s ease",
-                                    "&:hover": { opacity: 0.65 },
+                                    pb: 0.35,
+                                    borderBottom: "2px solid transparent",
+                                    transition: "opacity 0.2s ease, color 0.2s ease, border-color 0.2s ease",
+                                    "&:hover": { opacity: 0.75 },
+                                    "&.active": {
+                                        color: "primary.main",
+                                        borderColor: "primary.main",
+                                        opacity: 1,
+                                    },
                                 }}
                             >
                                 {t(item.label)}
@@ -250,14 +257,19 @@ export default function Navbar() {
                     {navLinks.map((item) => (
                         <Button
                             key={item.label}
-                            component={RouterLink}
+                            component={NavLink}
                             to={item.to}
+                            end={item.to === "/"}
                             onClick={closeDrawer}
                             color="inherit"
                             sx={{
                                 justifyContent: "flex-start",
                                 py: 1.2,
                                 borderRadius: 2,
+                                "&.active": {
+                                    color: "primary.main",
+                                    bgcolor: "action.selected",
+                                },
                             }}
                         >
                             {t(item.label)}

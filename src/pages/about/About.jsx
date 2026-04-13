@@ -53,33 +53,35 @@ export default function About() {
 
             <Container maxWidth={false} sx={{ px: { xs: 2.5, md: 6, lg: "165px" }, pb: { xs: 6, md: 8 } }}>
                 <Stack spacing={8}>
-                    <Grid container spacing={3} alignItems="stretch">
-                        <Grid size={{ xs: 12, lg: 6 }}>
-                            <Paper
-                                elevation={0}
-                                sx={{
-                                    height: "100%",
-                                    overflow: "hidden",
-                                    border: 1,
-                                    borderColor: "divider",
-                                    minHeight: { xs: 320, md: 520 },
-                                }}
-                            >
-                                <Box
-                                    component="img"
-                                    src={timelineImages[2]}
-                                    alt="Moon ceramic story timeline featuring a curated heritage visual"
-                                    sx={{ width: "100%", height: "100%", objectFit: "cover" }}
-                                />
-                            </Paper>
-                            <Typography sx={{ mt: 1.25, color: "text.secondary", fontSize: "0.88rem", lineHeight: 1.7 }}>
-                                A timeline-led visual that reflects the brand's crafted history and calm editorial tone.
-                            </Typography>
+                    <Grid container spacing={{ xs: 2.5, md: 3.5 }} alignItems="stretch">
+                        <Grid size={{ xs: 12, xl: 6 }}>
+                            <Stack spacing={1.25} sx={{ height: "100%" }}>
+                                <Paper
+                                    elevation={0}
+                                    sx={{
+                                        height: "100%",
+                                        overflow: "hidden",
+                                        border: 1,
+                                        borderColor: "divider",
+                                        minHeight: { xs: 280, sm: 360, md: 460, xl: 520 },
+                                    }}
+                                >
+                                    <Box
+                                        component="img"
+                                        src={timelineImages[2]}
+                                        alt="Moon ceramic story timeline featuring a curated heritage visual"
+                                        sx={{ width: "100%", height: "100%", objectFit: "cover" }}
+                                    />
+                                </Paper>
+                                <Typography sx={{ color: "text.secondary", fontSize: "0.88rem", lineHeight: 1.7, maxWidth: 640 }}>
+                                    A timeline-led visual that reflects the brand's crafted history and calm editorial tone.
+                                </Typography>
+                            </Stack>
                         </Grid>
-                        <Grid size={{ xs: 12, lg: 6 }}>
-                            <Grid container spacing={3}>
+                        <Grid size={{ xs: 12, xl: 6 }}>
+                            <Grid container spacing={{ xs: 2.5, md: 3 }}>
                                 {timelineImages.slice(0, 2).map((image, index) => (
-                                    <Grid key={image} size={{ xs: 12, sm: 6, lg: 12 }}>
+                                    <Grid key={image} size={{ xs: 12, md: 6, xl: 12 }}>
                                         <Stack spacing={1.25}>
                                             <Paper
                                                 elevation={0}
@@ -94,7 +96,11 @@ export default function About() {
                                                     component="img"
                                                     src={image}
                                                     alt={`Moon archive visual ${index + 1} showing handcrafted ceramic history`}
-                                                    sx={{ width: "100%", aspectRatio: { xs: "1 / 0.78", sm: "1 / 0.7" }, objectFit: "cover" }}
+                                                    sx={{
+                                                        width: "100%",
+                                                        aspectRatio: { xs: "1 / 0.8", sm: "1 / 0.7", xl: "1 / 0.62" },
+                                                        objectFit: "cover",
+                                                    }}
                                                 />
                                             </Paper>
                                             <Typography sx={{ color: "text.secondary", fontSize: "0.85rem", lineHeight: 1.7 }}>
@@ -125,11 +131,11 @@ export default function About() {
                                     <Stack spacing={2}>
                                         <Typography
                                             variant="h3"
-                                            sx={{ fontSize: "1.35rem", textTransform: "uppercase" }}
+                                            sx={{ fontSize: { xs: "1.15rem", md: "1.35rem" }, textTransform: "uppercase" }}
                                         >
                                             {item.title}
                                         </Typography>
-                                        <Typography sx={{ color: "text.secondary", lineHeight: 1.9 }}>
+                                        <Typography sx={{ color: "text.secondary", lineHeight: 1.9, fontSize: { xs: "0.95rem", md: "1rem" } }}>
                                             {item.text}
                                         </Typography>
                                     </Stack>
