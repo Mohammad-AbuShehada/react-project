@@ -1,27 +1,111 @@
 import React from "react";
-import {Box,Button,Container,Divider,FormControlLabel,Grid,Paper,Radio,RadioGroup,Stack,TextField,Typography,} from "@mui/material";
+import {Alert,Box,Button,Container,Divider,FormControlLabel,Grid,Paper,Radio,RadioGroup,Stack,TextField,Typography,} from "@mui/material";
 import { useTranslation } from "react-i18next";
+import { useForm, Controller } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
 import Loader from "../../ui/Loader/Loader";
 import useCart from "../../hooks/useCart";
 import useCheckout from "../../hooks/useCheckout";
+import EmptyCartState from "../../components/cart/EmptyCartState";
+import { createCheckoutSchema } from "../../validation/CheckoutSchema";
 
 
 export default function Checkout() {
     const { t } = useTranslation();
     const { data, isError, error, isLoading } = useCart();
-    const [paymentMethod, setPaymentMethod] = React.useState("CashOnDelivery");
-    const { mutate: checkout, isPending } = useCheckout();
+    const [serverErrors, setServerErrors] = React.useState([]);
+    const schema = React.useMemo(() => createCheckoutSchema(t), [t]);
+    const { mutateAsync: checkout, isPending } = useCheckout();
+    const hasItems = Boolean(data?.items?.length);
+    const {
+        register,
+        control,
+        handleSubmit,
+        watch,
+        formState: { errors, isValid },
+    } = useForm({
+        resolver: yupResolver(schema),
+        mode: "onBlur",
+        defaultValues: {
+            firstName: "",
+            lastName: "",
+            company: "",
+            countryRegion: "",
+            streetAddress: "",
+            townCity: "",
+            state: "",
+            zipCode: "",
+            phone: "",
+            email: "",
+            billingNotes: "",
+            paymentMethod: "Cash",
+            cardNumber: "",
+            nameOnCard: "",
+            expirationDate: "",
+            securityCode: "",
+        },
+    });
+    const paymentMethod = watch("paymentMethod");
 
     if (isLoading) return <Loader />;
     if (isError) return <Box color="error.main">{error.message}</Box>;
+    if (!hasItems) {
+        return (
+            <Box sx={{ py: { xs: 5, md: 8 } }}>
+                <Container maxWidth={false} sx={{ px: { xs: 2.5, md: 6, lg: "165px" } }}>
+                    <Stack spacing={5}>
+                        <Box>
+                            <Typography variant="subtitle1" sx={{ color: "text.secondary", fontSize: "0.78rem" }}>
+                                {t("Checkout")}
+                            </Typography>
+                            <Typography
+                                variant="h2"
+                                sx={{ fontSize: { xs: "2rem", md: "2.6rem" }, textTransform: "uppercase" }}
+                            >
+                                {t("Checkout")}
+                            </Typography>
+                        </Box>
+
+                        <EmptyCartState
+                            titleKey="CheckoutEmptyTitle"
+                            bodyKey="CheckoutEmptyBody"
+                            primaryTo="/categories"
+                            primaryLabelKey="GoShoppingNow"
+                            secondaryTo="/cart"
+                            secondaryLabelKey="ReturnToCart"
+                        />
+                    </Stack>
+                </Container>
+            </Box>
+        );
+    }
 
     const shipping = paymentMethod === "Visa" ? 0 : 15;
     const total = Number(data.cartTotal || 0) + shipping;
 
+    const getServerErrors = (errorResponse) => {
+        const payload = errorResponse?.response?.data;
+        if (errorResponse?.message && !payload) return [errorResponse.message];
+        if (Array.isArray(payload?.errors)) return payload.errors;
+        if (payload?.errors && typeof payload.errors === "object") {
+            return Object.values(payload.errors).flat().filter(Boolean);
+        }
+        return [payload?.message || payload?.title || errorResponse?.message || t("SomethingWentWrong")];
+    };
+
+    const onSubmit = async (values) => {
+        try {
+            setServerErrors([]);
+            await checkout(values);
+        } catch (submitError) {
+            setServerErrors(getServerErrors(submitError));
+        }
+    };
+
     return (
         <Box sx={{ py: { xs: 5, md: 8 } }}>
             <Container maxWidth={false} sx={{ px: { xs: 2.5, md: 6, lg: "165px" } }}>
-                <Stack spacing={5}>
+                <Stack component="form" spacing={5} onSubmit={handleSubmit(onSubmit)}>
                     <Box>
                         <Typography variant="subtitle1" sx={{ color: "text.secondary", fontSize: "0.78rem" }}>
                             {t("Checkout")}
@@ -33,6 +117,14 @@ export default function Checkout() {
                             {t("Checkout")}
                         </Typography>
                     </Box>
+
+                    {serverErrors.length > 0
+                        ? serverErrors.map((errorItem, index) => (
+                            <Alert key={`${errorItem}-${index}`} severity="error" variant="outlined">
+                                {errorItem}
+                            </Alert>
+                        ))
+                        : null}
 
                     <Grid container spacing={4} alignItems="flex-start">
                         <Grid size={{ xs: 12, lg: 7 }}>
@@ -47,37 +139,105 @@ export default function Checkout() {
 
                                     <Grid container spacing={2}>
                                         <Grid size={{ xs: 12, sm: 6 }}>
-                                            <TextField label={t("FirstName")} fullWidth />
+                                            <TextField
+                                                {...register("firstName")}
+                                                label={t("FirstName")}
+                                                fullWidth
+                                                error={!!errors.firstName}
+                                                helperText={errors.firstName?.message}
+                                            />
                                         </Grid>
                                         <Grid size={{ xs: 12, sm: 6 }}>
-                                            <TextField label={t("LastName")} fullWidth />
+                                            <TextField
+                                                {...register("lastName")}
+                                                label={t("LastName")}
+                                                fullWidth
+                                                error={!!errors.lastName}
+                                                helperText={errors.lastName?.message}
+                                            />
                                         </Grid>
                                         <Grid size={{ xs: 12, sm: 6 }}>
-                                            <TextField label={t("Company")} fullWidth />
+                                            <TextField
+                                                {...register("company")}
+                                                label={t("Company")}
+                                                fullWidth
+                                                error={!!errors.company}
+                                                helperText={errors.company?.message}
+                                            />
                                         </Grid>
                                         <Grid size={{ xs: 12, sm: 6 }}>
-                                            <TextField label={t("CountryRegion")} fullWidth />
+                                            <TextField
+                                                {...register("countryRegion")}
+                                                label={t("CountryRegion")}
+                                                fullWidth
+                                                error={!!errors.countryRegion}
+                                                helperText={errors.countryRegion?.message}
+                                            />
                                         </Grid>
                                         <Grid size={{ xs: 12 }}>
-                                            <TextField label={t("StreetAddress")} fullWidth />
+                                            <TextField
+                                                {...register("streetAddress")}
+                                                label={t("StreetAddress")}
+                                                fullWidth
+                                                error={!!errors.streetAddress}
+                                                helperText={errors.streetAddress?.message}
+                                            />
                                         </Grid>
                                         <Grid size={{ xs: 12, sm: 6 }}>
-                                            <TextField label={t("TownCity")} fullWidth />
+                                            <TextField
+                                                {...register("townCity")}
+                                                label={t("TownCity")}
+                                                fullWidth
+                                                error={!!errors.townCity}
+                                                helperText={errors.townCity?.message}
+                                            />
                                         </Grid>
                                         <Grid size={{ xs: 12, sm: 6 }}>
-                                            <TextField label={t("State")} fullWidth />
+                                            <TextField
+                                                {...register("state")}
+                                                label={t("State")}
+                                                fullWidth
+                                                error={!!errors.state}
+                                                helperText={errors.state?.message}
+                                            />
                                         </Grid>
                                         <Grid size={{ xs: 12, sm: 6 }}>
-                                            <TextField label={t("ZipCode")} fullWidth />
+                                            <TextField
+                                                {...register("zipCode")}
+                                                label={t("ZipCode")}
+                                                fullWidth
+                                                error={!!errors.zipCode}
+                                                helperText={errors.zipCode?.message}
+                                            />
                                         </Grid>
                                         <Grid size={{ xs: 12, sm: 6 }}>
-                                            <TextField label={t("Phone")} fullWidth />
+                                            <TextField
+                                                {...register("phone")}
+                                                label={t("Phone")}
+                                                fullWidth
+                                                error={!!errors.phone}
+                                                helperText={errors.phone?.message}
+                                            />
                                         </Grid>
                                         <Grid size={{ xs: 12 }}>
-                                            <TextField label={t("Email")} fullWidth />
+                                            <TextField
+                                                {...register("email")}
+                                                label={t("Email")}
+                                                fullWidth
+                                                error={!!errors.email}
+                                                helperText={errors.email?.message}
+                                            />
                                         </Grid>
                                         <Grid size={{ xs: 12 }}>
-                                            <TextField label={t("BillingNotes")} multiline rows={5} fullWidth />
+                                            <TextField
+                                                {...register("billingNotes")}
+                                                label={t("BillingNotes")}
+                                                multiline
+                                                rows={5}
+                                                fullWidth
+                                                error={!!errors.billingNotes}
+                                                helperText={errors.billingNotes?.message}
+                                            />
                                         </Grid>
                                     </Grid>
                                 </Stack>
@@ -141,21 +301,47 @@ export default function Checkout() {
                                             {t("Payment")}
                                         </Typography>
 
-                                        <RadioGroup value={paymentMethod} onChange={(event) => setPaymentMethod(event.target.value)}>
-                                            <FormControlLabel value="Visa" control={<Radio />} label={t("CreditCard")} />
-                                            <FormControlLabel
-                                                value="CashOnDelivery"
-                                                control={<Radio />}
-                                                label={t("CashOnDelivery")}
-                                            />
-                                        </RadioGroup>
+                                        <Controller
+                                            name="paymentMethod"
+                                            control={control}
+                                            render={({ field }) => (
+                                                <RadioGroup {...field}>
+                                                    <FormControlLabel value="Visa" control={<Radio />} label={t("CreditCard")} />
+                                                    <FormControlLabel value="Cash" control={<Radio />} label={t("CashOnDelivery")} />
+                                                </RadioGroup>
+                                            )}
+                                        />
 
                                         {paymentMethod === "Visa" ? (
                                             <Stack spacing={2}>
-                                                <TextField label={t("CardNumber")} fullWidth />
-                                                <TextField label={t("NameOnCard")} fullWidth />
-                                                <TextField label={t("ExpirationDate")} fullWidth />
-                                                <TextField label={t("SecurityCode")} fullWidth />
+                                                <TextField
+                                                    {...register("cardNumber")}
+                                                    label={t("CardNumber")}
+                                                    fullWidth
+                                                    error={!!errors.cardNumber}
+                                                    helperText={errors.cardNumber?.message}
+                                                />
+                                                <TextField
+                                                    {...register("nameOnCard")}
+                                                    label={t("NameOnCard")}
+                                                    fullWidth
+                                                    error={!!errors.nameOnCard}
+                                                    helperText={errors.nameOnCard?.message}
+                                                />
+                                                <TextField
+                                                    {...register("expirationDate")}
+                                                    label={t("ExpirationDate")}
+                                                    fullWidth
+                                                    error={!!errors.expirationDate}
+                                                    helperText={errors.expirationDate?.message}
+                                                />
+                                                <TextField
+                                                    {...register("securityCode")}
+                                                    label={t("SecurityCode")}
+                                                    fullWidth
+                                                    error={!!errors.securityCode}
+                                                    helperText={errors.securityCode?.message}
+                                                />
                                             </Stack>
                                         ) : (
                                             <Typography sx={{ color: "text.secondary", lineHeight: 1.8 }}>
@@ -163,7 +349,7 @@ export default function Checkout() {
                                             </Typography>
                                         )}
 
-                                        <Button variant="contained" disabled={isPending} onClick={() => checkout(paymentMethod)}>
+                                        <Button variant="contained" type="submit" disabled={isPending || !isValid}>
                                             {isPending ? t("Processing") : t("PlaceOrder")}
                                         </Button>
                                     </Stack>

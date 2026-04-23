@@ -1,14 +1,19 @@
 import { useMutation } from '@tanstack/react-query'
-import React from 'react'
 import authAxiosInstance from '../api/authAxioInstance'
 import { useQueryClient } from '@tanstack/react-query'
 export default function useCheckout() {
   const queryClient = useQueryClient();
   return useMutation({
-      mutationFn:async(paymentMethod)=>{
-        return await authAxiosInstance.post('/Checkouts',{
-          PaymentMethod:paymentMethod
+      mutationFn:async(formValues)=>{
+        const response = await authAxiosInstance.post('/Checkouts',{
+          PaymentMethod: formValues.paymentMethod,
         });
+
+        if (response.data?.success === false) {
+          throw new Error(response.data?.message || "Checkout request failed");
+        }
+
+        return response;
       },
       onSuccess:(response)=>{
         if(response.data.url){

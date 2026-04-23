@@ -14,10 +14,10 @@ export default function App() {
   const [queryClient] = useState(() => new QueryClient());
 
   const { i18n } = useTranslation();
+  const direction = i18n.language === "ar" ? "rtl" : "ltr";
   useEffect(() => {
-    const dir = i18n.language === "ar" ? "rtl" : "ltr";
-    document.documentElement.dir = dir;
-  }, [i18n.language])
+    document.documentElement.dir = direction;
+  }, [direction])
   const mode = useThemeStore((state) => state.mode);
   const token = useAuthStore((state) => state.token);
   const syncItemsWithAuth = useWishlistStore((state) => state.syncItemsWithAuth);
@@ -28,7 +28,7 @@ export default function App() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <ThemeProvider theme={getTheme(mode)}>
+      <ThemeProvider theme={getTheme(mode, direction)}>
         <CssBaseline />
         <RouterProvider router={router} />
       </ThemeProvider>

@@ -110,8 +110,9 @@ const commonTypography = {
     },
 };
 
-const getTheme = (mode) =>
+const getTheme = (mode, direction = "ltr") =>
     createTheme({
+        direction,
         palette: {
             mode,
             primary: {
@@ -200,6 +201,35 @@ const getTheme = (mode) =>
                     body: {
                         backgroundColor: paletteByMode[mode].background,
                         color: paletteByMode[mode].textPrimary,
+                    },
+                    "html[dir='rtl'] .MuiInputBase-input": {
+                        textAlign: "right",
+                        direction: "rtl",
+                    },
+                    "html[dir='rtl'] .MuiInputBase-input::placeholder": {
+                        textAlign: "right",
+                        direction: "rtl",
+                        opacity: 1,
+                    },
+                    "html[dir='rtl'] textarea.MuiInputBase-input": {
+                        textAlign: "right",
+                        direction: "rtl",
+                    },
+                    "html[dir='rtl'] .MuiFormHelperText-root": {
+                        textAlign: "right",
+                        marginRight: 14,
+                        marginLeft: 0,
+                    },
+                    "html[dir='rtl'] .MuiInputLabel-root": {
+                        right: 14,
+                        left: "auto",
+                        transformOrigin: "top right",
+                    },
+                    "html[dir='rtl'] .MuiInputLabel-outlined": {
+                        transform: "translate(-14px, 16px) scale(1)",
+                    },
+                    "html[dir='rtl'] .MuiInputLabel-outlined.MuiInputLabel-shrink": {
+                        transform: "translate(-14px, -9px) scale(0.75)",
                     },
                 },
             },
